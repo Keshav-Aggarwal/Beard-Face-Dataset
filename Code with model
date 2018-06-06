@@ -1,0 +1,352 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Hello, Colaboratory",
+      "version": "0.3.2",
+      "provenance": [],
+      "collapsed_sections": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "[View in Colaboratory](https://colab.research.google.com/github/Keshav-Aggarwal/Beard-Face-Dataset/blob/master/Code%20with%20model)"
+      ]
+    },
+    {
+      "metadata": {
+        "id": "4pt-sCgRTMw6",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "2c78c4d2-832a-4687-b3a0-b1b249b3fb58"
+      },
+      "cell_type": "code",
+      "source": [
+        "# !wget -O Part1.zip https://data.mendeley.com/datasets/znpyrgbfdr/1/files/6d4cb360-974a-4b29-97b7-fdc79a4717c7/Pgu-Face_Part1.zip?dl=1\n",
+        "# !wget -O Part2.zip https://data.mendeley.com/datasets/znpyrgbfdr/1/files/89b9aa93-c358-47ce-87dc-87b1d086f46a/Pgu-Face_Part2.zip?dl=1\n",
+        "# !wget -O Part3.zip https://data.mendeley.com/datasets/znpyrgbfdr/1/files/886a4519-d705-46ad-9000-39a9d3dc930b/Pgu-Face_Part3.zip?dl=1\n",
+        "# !wget -O Part4.zip https://data.mendeley.com/datasets/znpyrgbfdr/1/files/57c9ab1f-c6d2-47d5-b59c-06873de169c5/Pgu-Face_Part4.rar?dl=1\n",
+        "# !wget -O Part5.zip https://data.mendeley.com/datasets/znpyrgbfdr/1/files/44db6a33-7554-4cf9-aafd-71c7391332b1/Pgu-Face_Part5.zip?dl=1"
+      ],
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "LAbz1_UCTguS",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "443cb131-2468-4f3d-ecc3-3c241016bbfc"
+      },
+      "cell_type": "code",
+      "source": [
+        "# !unzip Part1.zip -d Dataset\n",
+        "# !unzip Part2.zip -d Dataset\n",
+        "# !unzip Part3.zip -d Dataset\n",
+        "# !unzip Part4.zip -d Dataset\n",
+        "# !unzip Part5.zip -d Dataset"
+      ],
+      "execution_count": 2,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "-Y_iJRZSTvKO",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "70ed9aab-08b9-47f1-dc22-48e434a3debf"
+      },
+      "cell_type": "code",
+      "source": [
+        "# !ls -ltr"
+      ],
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "LqSGEBlNUkXZ",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "a1645555-91af-4dba-bb32-33958a19365f"
+      },
+      "cell_type": "code",
+      "source": [
+        "from glob import glob\n",
+        "import numpy as np\n",
+        "import tensorflow as tf\n",
+        "import matplotlib.pyplot as plt"
+      ],
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "obw1DwKLUrnZ",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "fc94af4f-5bfd-47fb-97a0-ada3efd4aeae"
+      },
+      "cell_type": "code",
+      "source": [
+        "files_path = glob('Dataset/*/*.jpg')"
+      ],
+      "execution_count": 5,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "g3s20ON4UxlB",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "29ccd810-4658-40d6-c5cb-51da8b6f7397"
+      },
+      "cell_type": "code",
+      "source": [
+        "i=1\n",
+        "wo_beard = []\n",
+        "w_beard = []\n",
+        "for files in files_path:\n",
+        "  paths = files.split('.')\n",
+        "  i = int(paths[0][-2:])\n",
+        "  if(i<3):\n",
+        "    wo_beard.append(tf.image.resize_images(plt.imread(files),(200, 150)))\n",
+        "  else:\n",
+        "    w_beard.append(tf.image.resize_images(plt.imread(files),(200, 150)))"
+      ],
+      "execution_count": 6,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "f27XaJDtY0ME",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "c62f5229-7b83-4ac7-8390-ae5637b99590"
+      },
+      "cell_type": "code",
+      "source": [
+        "import tensorflow.contrib.slim as slim\n",
+        "# %matplotlib.pyplot inline\n",
+        "\n",
+        "in_image=tf.placeholder(tf.float32,[None,None,None,4])\n",
+        "gt_image=tf.placeholder(tf.float32,[None,None,None,4])"
+      ],
+      "execution_count": 13,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "VjcCqtqWWIFH",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "b3abbaa1-c48d-4317-9f8c-61b6a0b45bd1"
+      },
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "\n",
+        "def upsample_and_concat(x1, x2, output_channels, in_channels):\n",
+        "\n",
+        "    pool_size = 2\n",
+        "    deconv_filter = tf.Variable(tf.truncated_normal( [pool_size, pool_size, output_channels, in_channels], stddev=0.02))\n",
+        "    deconv = tf.nn.conv2d_transpose(x1, deconv_filter, tf.shape(x2) , strides=[1, pool_size, pool_size, 1])\n",
+        "\n",
+        "    deconv_output =  tf.concat([deconv, x2],3)\n",
+        "    deconv_output.set_shape([None, None, None, output_channels*2])\n",
+        "\n",
+        "    return deconv_output\n",
+        "\n",
+        "\n",
+        "\n",
+        "def lrelu(x):\n",
+        "    return tf.maximum(x*0.2,x)\n",
+        "  \n",
+        "regularizer_l2 = tf.contrib.layers.l2_regularizer(scale=0.1)\n",
+        "\n",
+        "conv1=slim.conv2d(in_image,32,[3,3], rate=1, activation_fn=lrelu,scope='g_conv1_1',weights_regularizer = regularizer_l2)\n",
+        "conv1=slim.conv2d(conv1,32,[3,3], rate=1, activation_fn=lrelu,scope='g_conv1_2',weights_regularizer = regularizer_l2)\n",
+        "pool1=slim.max_pool2d(conv1, [2, 2], padding='SAME' )\n",
+        "\n",
+        "conv2=slim.conv2d(pool1,64,[3,3], rate=1, activation_fn=lrelu,scope='g_conv2_1',weights_regularizer = regularizer_l2)\n",
+        "conv2=slim.conv2d(conv2,64,[3,3], rate=1, activation_fn=lrelu,scope='g_conv2_2',weights_regularizer = regularizer_l2)\n",
+        "pool2=slim.max_pool2d(conv2, [2, 2], padding='SAME' )\n",
+        "\n",
+        "conv3=slim.conv2d(pool2,128,[3,3], rate=1, activation_fn=lrelu,scope='g_conv3_1',weights_regularizer = regularizer_l2)\n",
+        "conv3=slim.conv2d(conv3,128,[3,3], rate=1, activation_fn=lrelu,scope='g_conv3_2',weights_regularizer = regularizer_l2)\n",
+        "pool3=slim.max_pool2d(conv3, [2, 2], padding='SAME' )\n",
+        "\n",
+        "conv4=slim.conv2d(pool3,256,[3,3], rate=1, activation_fn=lrelu,scope='g_conv4_1',weights_regularizer = regularizer_l2)\n",
+        "conv4=slim.conv2d(conv4,256,[3,3], rate=1, activation_fn=lrelu,scope='g_conv4_2',weights_regularizer = regularizer_l2)\n",
+        "pool4=slim.max_pool2d(conv4, [2, 2], padding='SAME' )\n",
+        "\n",
+        "conv5=slim.conv2d(pool4,512,[3,3], rate=1, activation_fn=lrelu,scope='g_conv5_1',weights_regularizer = regularizer_l2)\n",
+        "conv5=slim.conv2d(conv5,512,[3,3], rate=1, activation_fn=lrelu,scope='g_conv5_2',weights_regularizer = regularizer_l2)\n",
+        "\n",
+        "up6 =  upsample_and_concat( conv5, conv4, 256, 512  )\n",
+        "conv6=slim.conv2d(up6,  256,[3,3], rate=1, activation_fn=lrelu,scope='g_conv6_1',weights_regularizer = regularizer_l2)\n",
+        "conv6=slim.conv2d(conv6,256,[3,3], rate=1, activation_fn=lrelu,scope='g_conv6_2',weights_regularizer = regularizer_l2)\n",
+        "\n",
+        "up7 =  upsample_and_concat( conv6, conv3, 128, 256  )\n",
+        "conv7=slim.conv2d(up7,  128,[3,3], rate=1, activation_fn=lrelu,scope='g_conv7_1',weights_regularizer = regularizer_l2)\n",
+        "conv7=slim.conv2d(conv7,128,[3,3], rate=1, activation_fn=lrelu,scope='g_conv7_2',weights_regularizer = regularizer_l2)\n",
+        "\n",
+        "up8 =  upsample_and_concat( conv7, conv2, 64, 128 )\n",
+        "conv8=slim.conv2d(up8,  64,[3,3], rate=1, activation_fn=lrelu,scope='g_conv8_1',weights_regularizer = regularizer_l2)\n",
+        "conv8=slim.conv2d(conv8,64,[3,3], rate=1, activation_fn=lrelu,scope='g_conv8_2',weights_regularizer = regularizer_l2)\n",
+        "\n",
+        "up9 =  upsample_and_concat( conv8, conv1, 32, 64 )\n",
+        "conv9=slim.conv2d(up9,  32,[3,3], rate=1, activation_fn=lrelu,scope='g_conv9_1',weights_regularizer = regularizer_l2)\n",
+        "conv9=slim.conv2d(conv9,32,[3,3], rate=1, activation_fn=lrelu,scope='g_conv9_2',weights_regularizer = regularizer_l2)\n",
+        "\n",
+        "conv10=slim.conv2d(conv9,4,[1,1], rate=1, activation_fn=None, scope='g_conv10',weights_regularizer = regularizer_l2)\n",
+        "# out = tf.depth_to_space(conv10,4)\n",
+        "\n",
+        "\n",
+        "\n",
+        "out_image=conv10\n",
+        "sess = tf.Session()"
+      ],
+      "execution_count": 7,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "dBgWnDs0W0VF",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "outputId": "7aa7818a-8442-4ffb-d62f-ffccf1b867ae"
+      },
+      "cell_type": "code",
+      "source": [
+        "batch_xs = np.array([w_beard])\n",
+        "batch_ys = np.vstack([wo_beard])"
+      ],
+      "execution_count": 11,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "id": "SrZlBDkjYB69",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "outputId": "2711ec6a-99f0-4aba-fdbc-5723b70edb74"
+      },
+      "cell_type": "code",
+      "source": [
+        "batch_ys[0][0].shape"
+      ],
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "TensorShape([Dimension(200), Dimension(150), Dimension(3)])"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "ZcE-47eIZs9B",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 571
+        },
+        "outputId": "8a932a3a-61e6-43d6-a774-a16c8ea2e1f9"
+      },
+      "cell_type": "code",
+      "source": [
+        "reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)\n",
+        "reg_constant = 0.1  # Choose an appropriate one.\n",
+        "\n",
+        "G_loss = tf.reduce_mean(tf.abs(out_image - gt_image)) + reg_constant * sum(reg_losses)\n",
+        "\n",
+        "G_opt=tf.train.AdamOptimizer(learning_rate=0.0005).minimize(G_loss)\n",
+        "sess.run(tf.global_variables_initializer())\n",
+        "for i in range(250):\n",
+        "  _=sess.run([G_opt],feed_dict={in_image:batch_xs,gt_image:batch_ys})\n",
+        "#   print(\"Loss for epoch {v_one} is {v_two}\".format(v_one = i, v_two = G_current))\n"
+      ],
+      "execution_count": 14,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "ValueError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mValueError\u001b[0m                                Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-14-c1375ce393b2>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      7\u001b[0m \u001b[0msess\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtf\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mglobal_variables_initializer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      8\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mi\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m250\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 9\u001b[0;31m   \u001b[0m_\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0msess\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mG_opt\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mfeed_dict\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m{\u001b[0m\u001b[0min_image\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0mbatch_xs\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mgt_image\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0mbatch_ys\u001b[0m\u001b[0;34m}\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     10\u001b[0m \u001b[0;31m#   print(\"Loss for epoch {v_one} is {v_two}\".format(v_one = i, v_two = G_current))\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/client/session.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self, fetches, feed_dict, options, run_metadata)\u001b[0m\n\u001b[1;32m    898\u001b[0m     \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    899\u001b[0m       result = self._run(None, fetches, feed_dict, options_ptr,\n\u001b[0;32m--> 900\u001b[0;31m                          run_metadata_ptr)\n\u001b[0m\u001b[1;32m    901\u001b[0m       \u001b[0;32mif\u001b[0m \u001b[0mrun_metadata\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    902\u001b[0m         \u001b[0mproto_data\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtf_session\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mTF_GetBuffer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mrun_metadata_ptr\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/client/session.py\u001b[0m in \u001b[0;36m_run\u001b[0;34m(self, handle, fetches, feed_dict, options, run_metadata)\u001b[0m\n\u001b[1;32m   1102\u001b[0m             \u001b[0mfeed_handles\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0msubfeed_t\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0msubfeed_val\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1103\u001b[0m           \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1104\u001b[0;31m             \u001b[0mnp_val\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0masarray\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msubfeed_val\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdtype\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0msubfeed_dtype\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1105\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1106\u001b[0m           if (not is_tensor_handle_feed and\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/numpy/core/numeric.py\u001b[0m in \u001b[0;36masarray\u001b[0;34m(a, dtype, order)\u001b[0m\n\u001b[1;32m    490\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    491\u001b[0m     \"\"\"\n\u001b[0;32m--> 492\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0marray\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ma\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdtype\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcopy\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mFalse\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0morder\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0morder\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    493\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    494\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mValueError\u001b[0m: setting an array element with a sequence."
+          ]
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "ppnHBdv7bgxQ",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "execution_count": 0,
+      "outputs": []
+    }
+  ]
+}
